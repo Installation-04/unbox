@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path // empty' | grep -q '/image/' && echo 'Rappel: image/ modifié, relance /vm avant de conclure.' >&2 || true"
+          }
+        ]
+      }
+    ]
+  }
+}

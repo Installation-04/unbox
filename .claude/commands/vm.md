@@ -1,0 +1,1 @@
+Build l'image (`tools/build-image.sh`), génère le disque (`tools/build-iso.sh`), boote-le avec `tools/run-vm.sh --screenshot build/boot.png`, puis montre le screenshot et résume le résultat honnêtement.
