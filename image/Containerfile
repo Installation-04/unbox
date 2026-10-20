@@ -1,0 +1,22 @@
+# UnboxOS : image bootc minimale, sans environnement desktop.
+FROM quay.io/fedora/fedora-bootc:42
+
+RUN dnf install -y --setopt=install_weak_deps=False \
+        gamescope mesa-dri-drivers mesa-vulkan-drivers mesa-libGL \
+        pipewire pipewire-pulseaudio wireplumber \
+        NetworkManager bluez \
+        libinput libxkbcommon \
+    && dnf clean all
+
+# Utilisateur de la session console (sans mot de passe, pas de login visible)
+RUN useradd -m -G video,audio,input,render unbox \
+    && passwd -l unbox
+
+COPY overlay/ /
+COPY systemd/ /usr/lib/systemd/system/
+
+# Shell : binaire exporté depuis shell/ (voir tools/build-image.sh)
+COPY build/unbox-shell /usr/libexec/unbox-shell
+
+RUN systemctl enable unbox-session.service NetworkManager.service bluetooth.service \
+    && systemctl set-default graphical.target
